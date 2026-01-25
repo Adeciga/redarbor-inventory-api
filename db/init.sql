@@ -1,0 +1,26 @@
+CREATE DATABASE InventoryDb;
+GO
+USE InventoryDb;
+GO
+
+CREATE TABLE Categories (
+    Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,
+    IsActive BIT NOT NULL
+);
+
+CREATE TABLE Products (
+    Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,
+    CategoryId INT NOT NULL,
+    Stock INT NOT NULL,
+    IsActive BIT NOT NULL
+);
+
+CREATE TABLE InventoryMovements (
+    Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ProductId INT NOT NULL,
+    Quantity INT NOT NULL,
+    Type NVARCHAR(20) NOT NULL,
+    CreatedAtUtc DATETIME2 NOT NULL
+);
