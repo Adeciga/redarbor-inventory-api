@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -6,7 +8,7 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
     ports:
-      - "1433:1433"
+      - "14330:1433"
     healthcheck:
       test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${MSSQL_SA_PASSWORD}' -Q 'SELECT 1' -C || exit 1"]
       interval: 10s
@@ -14,7 +16,22 @@ services:
       retries: 10
       start_period: 20s
 
-  api:
+  inventory-identity:
+    build:
+      context: .
+      dockerfile: src/Inventory.Identity/Dockerfile
+    container_name: inventory-identity
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__AuthDb: "Server=inventory-sql;Database=AuthDb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;"
+    ports:
+      - "5001:8080"
+
+  inventory-api:
     build:
       context: .
       dockerfile: src/Inventory.Api/Dockerfile
@@ -22,12 +39,12 @@ services:
     depends_on:
       sqlserver:
         condition: service_healthy
+      inventory-identity:
+        condition: service_started
     environment:
       ASPNETCORE_URLS: "http://+:8080"
-      ConnectionStrings__Default: "Server=sqlserver;Database=InventoryDb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;"
-      Jwt__Issuer: "${JWT_ISSUER}"
-      Jwt__Audience: "${JWT_AUDIENCE}"
-      Jwt__Key: "${JWT_KEY}"
       ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__Default: "Server=inventory-sql;Database=InventoryDb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;"
+      OAuth__Authority: "http://inventory-identity:8080"
     ports:
       - "5000:8080"
