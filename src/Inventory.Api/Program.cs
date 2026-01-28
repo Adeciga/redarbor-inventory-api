@@ -11,23 +11,20 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Inventory.Application;
-
-
-
+using FluentValidation;
+using Inventory.Application.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddDbContext<InventoryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<InventoryMovementService>();
 builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
 builder.Services.AddTransient<Inventory.Api.Middlewares.ExceptionHandlingMiddleware>();
-
+builder.Services.AddValidatorsFromAssembly(typeof(AssemblyReference).Assembly);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,7 +32,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory.Api", Version = "v1" });
-
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -50,9 +46,7 @@ builder.Services.AddSwaggerGen(options =>
             Id = "Bearer"
         }
     };
-
     options.AddSecurityDefinition("Bearer", securityScheme);
-
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -61,14 +55,10 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-
-
 builder.Services.AddSingleton<JwtTokenService>();
-
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? string.Empty;
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? string.Empty;
 var jwtKey = builder.Configuration["Jwt:Key"] ?? string.Empty;
-
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -84,23 +74,16 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
-
-
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseMiddleware<Inventory.Api.Middlewares.ExceptionHandlingMiddleware>();
 app.MapControllers();
-
 app.Run();
