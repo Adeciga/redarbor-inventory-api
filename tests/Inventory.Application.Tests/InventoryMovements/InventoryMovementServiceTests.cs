@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Inventory.Application.InventoryMovements;
+using Inventory.Domain;
 using Moq;
 using Xunit;
 

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Inventory.Application.InventoryMovements;
+using Inventory.Domain;
 using Microsoft.Data.SqlClient;
 
 namespace Inventory.Infrastructure.Persistence.Repositories;

@@ -1,6 +1,8 @@
-﻿namespace Inventory.Application.InventoryMovements;
+﻿using Inventory.Application.InventoryMovements;
 
 public interface IInventoryMovementWriteRepository
 {
-    Task<InventoryMovementResult?> CreateAsync(CreateInventoryMovementRequest request, CancellationToken cancellationToken);
+    Task<InventoryMovementResult?> CreateAsync(
+        CreateInventoryMovementRequest request,
+        CancellationToken cancellationToken);
 }

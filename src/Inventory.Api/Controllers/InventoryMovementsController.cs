@@ -1,6 +1,8 @@
 ﻿using Inventory.Application.InventoryMovements;
-using Microsoft.AspNetCore.Mvc;
+using Inventory.Application.InventoryMovements.Commands.CreateInventoryMovement;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.Api.Controllers;
 
@@ -9,20 +11,25 @@ namespace Inventory.Api.Controllers;
 [Route("api/inventory-movements")]
 public sealed class InventoryMovementsController : ControllerBase
 {
-    private readonly InventoryMovementService _service;
+    private readonly IMediator _mediator;
 
-    public InventoryMovementsController(InventoryMovementService service)
+    public InventoryMovementsController(IMediator mediator)
     {
-        _service = service;
+        _mediator = mediator;
     }
 
     [HttpPost]
-    public async Task<ActionResult<InventoryMovementResult>> Create(
-        CreateInventoryMovementRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(
+        [FromBody] CreateInventoryMovementRequest request,
+        CancellationToken ct)
     {
-        var result = await _service.CreateAsync(request, cancellationToken);
+        var result = await _mediator.Send(
+            new CreateInventoryMovementCommand(
+                request.ProductId,
+                request.Quantity,
+                request.Type),
+            ct);
 
-        return result is null ? BadRequest() : Ok(result);
+        return Ok(result);
     }
 }
