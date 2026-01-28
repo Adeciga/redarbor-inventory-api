@@ -1,15 +1,16 @@
-using Inventory.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using Inventory.Api.Auth;
 using Inventory.Application.Categories;
-using Inventory.Infrastructure;
-using Inventory.Application.Products;
 using Inventory.Application.InventoryMovements;
-using System.Text;
+using Inventory.Application.Products;
+using Inventory.Infrastructure;
+using Inventory.Infrastructure.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Inventory.Api.Auth;
-
+using System.Text;
+using Inventory.Application;
 
 
 
@@ -24,9 +25,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<InventoryMovementService>();
-
-
-
+builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
