@@ -26,6 +26,8 @@ builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<InventoryMovementService>();
 builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
+builder.Services.AddTransient<Inventory.Api.Middlewares.ExceptionHandlingMiddleware>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -98,7 +100,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
+app.UseMiddleware<Inventory.Api.Middlewares.ExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();

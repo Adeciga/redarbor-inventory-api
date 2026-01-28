@@ -28,8 +28,8 @@ public static class DependencyInjection
         services.AddScoped<IProductReadRepository, ProductReadRepository>();
         services.AddScoped<IProductWriteRepository>(_ => new ProductWriteRepository(connectionString));
 
+        services.AddScoped<IInventoryMovementReadRepository, InventoryMovementReadRepository>();
         services.AddScoped<IInventoryMovementWriteRepository>(_ => new InventoryMovementWriteRepository(connectionString));
-
 
 
         return services;
