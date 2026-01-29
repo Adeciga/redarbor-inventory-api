@@ -2,58 +2,47 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Inventory.Application.Behaviors;
+using Inventory.Application.Tests.TestDoubles;
 using MediatR;
 using Moq;
 
-namespace Inventory.Application.Tests.Behaviors {
-    public class ValidationBehaviorTests
+public class ValidationBehaviorTests
+{
+    [Fact]
+    public async Task Should_throw_when_any_validator_fails()
     {
-        [Fact]
-        public async Task Should_throw_validation_exception_when_validation_fails()
-        {
-            var validator = new Mock<IValidator<TestRequest>>();
-            validator
-                .Setup(v => v.ValidateAsync(It.IsAny<TestRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult(new[]
-                {
-                new ValidationFailure("Field", "Error")
-                }));
+        var validator = new Mock<IValidator<TestRequest>>();
 
-            var behavior = new ValidationBehavior<TestRequest, Unit>(
-                new[] { validator.Object }
-            );
+        validator.As<IValidator>()
+            .Setup(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult(new[] { new ValidationFailure("Name", "Required") }));
 
-            await FluentActions
-                .Invoking(() => behavior.Handle(
-                    new TestRequest(),
-                    () => Task.FromResult(Unit.Value),
-                    CancellationToken.None))
-                .Should()
-                .ThrowAsync<ValidationException>();
-        }
+        var behavior = new ValidationBehavior<TestRequest, Unit>(new[] { validator.Object });
 
-        [Fact]
-        public async Task Should_call_next_when_validation_succeeds()
-        {
-            var validator = new Mock<IValidator<TestRequest>>();
-            validator
-                .Setup(v => v.ValidateAsync(It.IsAny<TestRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult());
+        Func<Task> act = () => behavior.Handle(
+            new TestRequest(),
+            () => Task.FromResult(Unit.Value),
+            CancellationToken.None);
 
-            var behavior = new ValidationBehavior<TestRequest, Unit>(
-                new[] { validator.Object }
-            );
+        await act.Should().ThrowAsync<ValidationException>();
+    }
 
-            var result = await behavior.Handle(
-                new TestRequest(),
-                () => Task.FromResult(Unit.Value),
-                CancellationToken.None);
+    [Fact]
+    public async Task Should_call_next_when_all_validators_pass()
+    {
+        var validator = new Mock<IValidator<TestRequest>>();
 
-            result.Should().Be(Unit.Value);
-        }
+        validator.As<IValidator>()
+            .Setup(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
 
-        private class TestRequest : IRequest<Unit> { }
+        var behavior = new ValidationBehavior<TestRequest, Unit>(new[] { validator.Object });
+
+        var result = await behavior.Handle(
+            new TestRequest(),
+            () => Task.FromResult(Unit.Value),
+            CancellationToken.None);
+
+        result.Should().Be(Unit.Value);
     }
 }
-
-

@@ -13,10 +13,13 @@ public sealed class ValidationBehavior<TRequest, TResponse>
         => _validators = validators;
 
     public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
+    TRequest request,
+    RequestHandlerDelegate<TResponse> next,
+    CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(next);
+
         if (!_validators.Any())
             return await next();
 
@@ -26,13 +29,16 @@ public sealed class ValidationBehavior<TRequest, TResponse>
             _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
 
         var failures = results
-            .SelectMany(r => r.Errors)
+            .Where(r => r is not null)
+            .SelectMany(r => r!.Errors ?? Enumerable.Empty<FluentValidation.Results.ValidationFailure>())
             .Where(f => f is not null)
             .ToList();
 
         if (failures.Count != 0)
-            throw new FluentValidation.ValidationException(failures);
+            throw new ValidationException(failures);
 
         return await next();
     }
+
+
 }
