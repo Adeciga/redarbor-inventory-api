@@ -26,4 +26,23 @@ public sealed class CategoryReadRepository : ICategoryReadRepository
             .Where(x => x.Id == id)
             .Select(x => new CategoryDto(x.Id, x.Name, x.IsActive))
             .SingleOrDefaultAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<CategoryDto>> GetAllPagedAsync(
+       int page,
+       int pageSize,
+       CancellationToken cancellationToken)
+    {
+        var skip = (page - 1) * pageSize;
+
+        return await _dbContext.Categories
+            .OrderBy(x => x.Id)
+            .Skip(skip)
+            .Take(pageSize)
+            .Select(x => new CategoryDto(
+                x.Id,
+                x.Name,
+                x.IsActive))
+            .ToListAsync(cancellationToken);
+    }
+
 }

@@ -26,4 +26,25 @@ public sealed class ProductReadRepository : IProductReadRepository
             .Where(x => x.Id == id)
             .Select(x => new ProductDto(x.Id, x.Name, x.CategoryId, x.Stock, x.IsActive))
             .SingleOrDefaultAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<ProductDto>> GetAllPagedAsync(
+    int page,
+    int pageSize,
+    CancellationToken cancellationToken)
+    {
+        var skip = (page - 1) * pageSize;
+
+        return await _dbContext.Products
+            .OrderBy(p => p.Id)
+            .Skip(skip)
+            .Take(pageSize)
+            .Select(p => new ProductDto(
+                p.Id,
+                p.Name,
+                p.CategoryId,
+                p.Stock,
+                p.IsActive))
+            .ToListAsync(cancellationToken);
+    }
+
 }

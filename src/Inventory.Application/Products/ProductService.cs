@@ -27,5 +27,13 @@ public sealed class ProductService
 
     public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken) =>
         _writeRepository.DeleteAsync(id, cancellationToken);
+
+    public Task<IReadOnlyList<ProductDto>> GetAllPagedAsync(
+    int page,
+    int pageSize,
+    CancellationToken cancellationToken) =>
+    _readRepository.GetAllPagedAsync(page, pageSize, cancellationToken);
+
+
 }
 

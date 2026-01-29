@@ -10,43 +10,20 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 var builder = WebApplication.CreateBuilder(args);
-
-// --------------------
-// Persistence / Infra
-// --------------------
 builder.Services.AddDbContext<InventoryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-
 builder.Services.AddInfrastructure(builder.Configuration);
-
-// --------------------
-// App Services (por ahora)
-// --------------------
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<InventoryMovementService>();
-
-// --------------------
-// MediatR + Validation Pipeline
-// --------------------
 builder.Services.AddMediatR(typeof(Inventory.Application.AssemblyReference).Assembly);
 builder.Services.AddValidatorsFromAssembly(typeof(Inventory.Application.AssemblyReference).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-// --------------------
-// Middleware(s)
-// --------------------
 builder.Services.AddTransient<Inventory.Api.Middlewares.ExceptionHandlingMiddleware>();
-
-// --------------------
-// AuthN (OAuth2/OIDC via Authority - OpenIddict)
-// --------------------
 // En Docker: OAuth__Authority=http://inventory-identity:8080
 // En local:  OAuth__Authority=http://localhost:5001  (si expones identity 5001:8080)
 var authority = builder.Configuration["OAuth:Authority"] ?? "http://localhost:5001";
-
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -59,14 +36,8 @@ builder.Services
             ValidateAudience = false, // por simplicidad en prueba técnica
         };
     });
-
 builder.Services.AddAuthorization();
-
-// --------------------
-// Controllers + Swagger
-// --------------------
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -94,27 +65,15 @@ builder.Services.AddSwaggerGen(options =>
         { securityScheme, Array.Empty<string>() }
     });
 });
-
 var app = builder.Build();
-
-// --------------------
-// HTTP pipeline
-// --------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
-// OJO: tu middleware de excepciones debe ir ANTES de MapControllers,
-// y típicamente lo ponemos antes/después de auth según lo que quieras capturar.
-// Yo lo dejo después de auth para que 401/403 salgan normales, y capture domain/validation.
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseMiddleware<Inventory.Api.Middlewares.ExceptionHandlingMiddleware>();
-
 app.MapControllers();
 app.Run();
