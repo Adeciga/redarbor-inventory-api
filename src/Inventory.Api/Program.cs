@@ -31,8 +31,8 @@ builder.Services.AddScoped<InventoryMovementService>();
 // --------------------
 // MediatR + Validation Pipeline
 // --------------------
-builder.Services.AddMediatR(typeof(AssemblyReference).Assembly);
-builder.Services.AddValidatorsFromAssembly(typeof(AssemblyReference).Assembly);
+builder.Services.AddMediatR(typeof(Inventory.Application.AssemblyReference).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(Inventory.Application.AssemblyReference).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // --------------------

@@ -219,10 +219,24 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
+    "name": "Inventory.Api",
+    "classes": [
+      { "name": "Inventory.Api.Auth.JwtTokenService", "rp": "Inventory.Api_JwtTokenService.html", "cl": 0, "ucl": 23, "cal": 23, "tl": 42, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Contracts.AuthTokenRequest", "rp": "Inventory.Api_AuthTokenRequest.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 3, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Contracts.AuthTokenResponse", "rp": "Inventory.Api_AuthTokenResponse.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 3, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Controllers.AuthController", "rp": "Inventory.Api_AuthController.html", "cl": 0, "ucl": 12, "cal": 12, "tl": 34, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Controllers.CategoriesController", "rp": "Inventory.Api_CategoriesController.html", "cl": 0, "ucl": 27, "cal": 27, "tl": 66, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Controllers.InventoryMovementsController", "rp": "Inventory.Api_InventoryMovementsController.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 35, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Controllers.ProductsController", "rp": "Inventory.Api_ProductsController.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 56, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Api.Middlewares.ExceptionHandlingMiddleware", "rp": "Inventory.Api_ExceptionHandlingMiddleware.html", "cl": 0, "ucl": 27, "cal": 27, "tl": 44, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "Inventory.Api_Program.html", "cl": 0, "ucl": 65, "cal": 65, "tl": 120, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+    ]},
+  {
     "name": "Inventory.Application",
     "classes": [
       { "name": "CreateInventoryMovementRequest", "rp": "Inventory.Application_CreateInventoryMovementRequest.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Inventory.Application.Behaviors.ValidationBehavior<T1, T2>", "rp": "Inventory.Application_ValidationBehavior_2.html", "cl": 0, "ucl": 16, "cal": 16, "tl": 38, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Application.Behaviors.LoggingBehavior<T1, T2>", "rp": "Inventory.Application_LoggingBehavior_2.html", "cl": 19, "ucl": 0, "cal": 19, "tl": 45, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Application.Behaviors.ValidationBehavior<T1, T2>", "rp": "Inventory.Application_ValidationBehavior_2.html", "cl": 18, "ucl": 1, "cal": 19, "tl": 44, "cb": 10, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Inventory.Application.Categories.CategoryDto", "rp": "Inventory.Application_CategoryDto.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 4, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Inventory.Application.Categories.CategoryService", "rp": "Inventory.Application_CategoryService.html", "cl": 0, "ucl": 12, "cal": 12, "tl": 31, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Inventory.Application.Categories.Commands.CreateCategory.CreateCategoryCommand", "rp": "Inventory.Application_CreateCategoryCommand.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -247,6 +261,31 @@ var assemblies = [
     "classes": [
       { "name": "Inventory.Domain.DomainException", "rp": "Inventory.Domain_DomainException.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Inventory.Domain.InventoryItem", "rp": "Inventory.Domain_InventoryItem.html", "cl": 18, "ucl": 3, "cal": 21, "tl": 32, "cb": 10, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+    ]},
+  {
+    "name": "Inventory.Identity",
+    "classes": [
+      { "name": "Inventory.Identity.Controllers.WeatherForecastController", "rp": "Inventory.Identity_WeatherForecastController.html", "cl": 0, "ucl": 17, "cal": 17, "tl": 32, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Identity.Persistence.AuthDbContext", "rp": "Inventory.Identity_AuthDbContext.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 15, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Identity.Persistence.Migrations.AuthDbContextModelSnapshot", "rp": "Inventory.Identity_AuthDbContextModelSnapshot.html", "cl": 0, "ucl": 245, "cal": 245, "tl": 274, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Identity.Persistence.Migrations.InitialOpenIddict", "rp": "Inventory.Identity_InitialOpenIddict.html", "cl": 0, "ucl": 385, "cal": 385, "tl": 442, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Identity.WeatherForecast", "rp": "Inventory.Identity_WeatherForecast.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "Inventory.Identity_Program.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 79, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+    ]},
+  {
+    "name": "Inventory.Infrastructure",
+    "classes": [
+      { "name": "Inventory.Infrastructure.DependencyInjection", "rp": "Inventory.Infrastructure_DependencyInjection.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 41, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Entities.CategoryEntity", "rp": "Inventory.Infrastructure_CategoryEntity.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Entities.InventoryMovementEntity", "rp": "Inventory.Infrastructure_InventoryMovementEntity.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 11, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Entities.ProductEntity", "rp": "Inventory.Infrastructure_ProductEntity.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.InventoryDbContext", "rp": "Inventory.Infrastructure_InventoryDbContext.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Repositories.CategoryReadRepository", "rp": "Inventory.Infrastructure_CategoryReadRepository.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Repositories.CategoryWriteRepository", "rp": "Inventory.Infrastructure_CategoryWriteRepository.html", "cl": 0, "ucl": 25, "cal": 25, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Repositories.InventoryMovementReadRepository", "rp": "Inventory.Infrastructure_InventoryMovementReadRepository.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 26, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Repositories.InventoryMovementWriteRepository", "rp": "Inventory.Infrastructure_InventoryMovementWriteRepository.html", "cl": 0, "ucl": 57, "cal": 57, "tl": 116, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Repositories.ProductReadRepository", "rp": "Inventory.Infrastructure_ProductReadRepository.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Inventory.Infrastructure.Persistence.Repositories.ProductWriteRepository", "rp": "Inventory.Infrastructure_ProductWriteRepository.html", "cl": 0, "ucl": 22, "cal": 22, "tl": 57, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
