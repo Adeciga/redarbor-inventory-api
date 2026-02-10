@@ -1,5 +1,4 @@
 ﻿namespace Inventory.Application.Categories;
-
 public interface ICategoryReadRepository
 {
     Task<IReadOnlyList<CategoryDto>> GetAllAsync(CancellationToken cancellationToken);
@@ -8,5 +7,4 @@ public interface ICategoryReadRepository
     int page,
     int pageSize,
     CancellationToken cancellationToken);
-
 }

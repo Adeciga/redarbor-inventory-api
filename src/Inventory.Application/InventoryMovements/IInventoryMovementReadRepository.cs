@@ -1,5 +1,4 @@
 ﻿namespace Inventory.Application.InventoryMovements;
-
 public interface IInventoryMovementReadRepository
 {
     Task<int> GetCurrentStockAsync(

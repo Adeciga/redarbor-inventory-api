@@ -1,5 +1,4 @@
 ﻿namespace Inventory.Application.Products;
-
 public interface IProductWriteRepository
 {
     Task<int> CreateAsync(CreateProductRequest request, CancellationToken cancellationToken);

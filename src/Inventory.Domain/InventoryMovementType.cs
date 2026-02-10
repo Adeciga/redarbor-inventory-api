@@ -1,5 +1,4 @@
 ﻿namespace Inventory.Domain;
-
 public enum InventoryMovementType
 {
     In = 1,

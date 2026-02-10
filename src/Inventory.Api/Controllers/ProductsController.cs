@@ -2,24 +2,21 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-
 namespace Inventory.Api.Controllers;
-
 [Authorize]
 [ApiController]
-[Route("api/products")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/products")]
 [Produces("application/json")]
 [SwaggerTag("Product management operations")]
 public sealed class ProductsController : ControllerBase
 {
     private const int MaxPageSize = 100;
     private readonly ProductService _service;
-
     public ProductsController(ProductService service)
     {
         _service = service;
     }
-
     /// <summary>
     /// Retrieves products using pagination.
     /// </summary>
@@ -33,8 +30,7 @@ public sealed class ProductsController : ControllerBase
     [HttpGet]
     [SwaggerOperation(
     Summary = "Get products (paginated)",
-    Description = "Returns products using page and pageSize query parameters"
-)]
+    Description = "Returns products using page and pageSize query parameters")]
     [ProducesResponseType(typeof(IReadOnlyList<ProductDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -47,18 +43,13 @@ public sealed class ProductsController : ControllerBase
         {
             return BadRequest();
         }
-
         if (pageSize > MaxPageSize)
         {
             pageSize = MaxPageSize;
         }
-
-
         return Ok(await _service.GetAllPagedAsync(page, pageSize, cancellationToken));
     }
-
-
-    /// <summary>
+        /// <summary>
     /// Retrieves a product by its identifier.
     /// </summary>
     /// <param name="id">Product identifier</param>
@@ -81,7 +72,6 @@ public sealed class ProductsController : ControllerBase
         var result = await _service.GetByIdAsync(id, cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
-
     /// <summary>
     /// Creates a new product.
     /// </summary>
@@ -106,7 +96,6 @@ public sealed class ProductsController : ControllerBase
         var id = await _service.CreateAsync(request, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
-
     /// <summary>
     /// Updates an existing product.
     /// </summary>
@@ -134,11 +123,9 @@ public sealed class ProductsController : ControllerBase
         {
             return BadRequest();
         }
-
         var updated = await _service.UpdateAsync(request, cancellationToken);
         return updated ? NoContent() : NotFound();
     }
-
     /// <summary>
     /// Deletes a product.
     /// </summary>

@@ -1,26 +1,22 @@
-﻿using Inventory.Application.InventoryMovements;
-using Inventory.Application.InventoryMovements.Commands.CreateInventoryMovement;
+﻿using Inventory.Application.InventoryMovements.Commands.CreateInventoryMovement;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-
 namespace Inventory.Api.Controllers;
-
 [Authorize]
 [ApiController]
-[Route("api/inventory-movements")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/inventory-movements")]
 [Produces("application/json")]
 [SwaggerTag("Inventory movement operations")]
 public sealed class InventoryMovementsController : ControllerBase
 {
     private readonly IMediator _mediator;
-
     public InventoryMovementsController(IMediator mediator)
     {
         _mediator = mediator;
     }
-
     /// <summary>
     /// Registers an inventory movement (inbound or outbound) for a product.
     /// </summary>

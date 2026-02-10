@@ -1,5 +1,4 @@
 using FluentValidation;
-using Inventory.Application;
 using Inventory.Application.Behaviors;
 using Inventory.Application.Categories;
 using Inventory.Application.InventoryMovements;
@@ -8,6 +7,8 @@ using Inventory.Infrastructure;
 using Inventory.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
@@ -38,11 +39,22 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+});
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory.Api", Version = "v1" });
-
     // Mantener bearer para pegar el access_token obtenido del /connect/token
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -58,7 +70,6 @@ builder.Services.AddSwaggerGen(options =>
             Id = "Bearer"
         }
     };
-
     options.AddSecurityDefinition("Bearer", securityScheme);
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {

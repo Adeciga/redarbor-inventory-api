@@ -1,29 +1,25 @@
 ﻿using Inventory.Application.Categories;
 using Inventory.Application.Categories.Commands.CreateCategory;
-using Inventory.Application.Categories.Queries.GetCategories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-
 namespace Inventory.Api.Controllers;
-
 [Authorize]
 [ApiController]
-[Route("api/categories")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/categories")]
 [Produces("application/json")]
 [SwaggerTag("Category management operations")]
 public sealed class CategoriesController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly CategoryService _service;
-
     public CategoriesController(IMediator mediator, CategoryService service)
     {
         _mediator = mediator;
         _service = service;
     }
-
     /// <summary>
     /// Retrieves categories using pagination.
     /// </summary>
@@ -35,7 +31,6 @@ public sealed class CategoriesController : ControllerBase
     /// <response code="400">Invalid pagination parameters</response>
     /// <response code="401">Unauthorized</response>
     private const int MaxPageSize = 100;
-
     [HttpGet]
     [SwaggerOperation(
         Summary = "Get categories (paginated)",
@@ -61,9 +56,6 @@ public sealed class CategoriesController : ControllerBase
 
         return Ok(await _service.GetAllPagedAsync(page, pageSize, cancellationToken));
     }
-
-
-
     /// <summary>
     /// Retrieves a category by its identifier.
     /// </summary>
@@ -87,7 +79,6 @@ public sealed class CategoriesController : ControllerBase
         var result = await _service.GetByIdAsync(id, cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
-
     /// <summary>
     /// Creates a new category.
     /// </summary>
@@ -115,7 +106,6 @@ public sealed class CategoriesController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
-
     /// <summary>
     /// Updates an existing category.
     /// </summary>
@@ -147,7 +137,6 @@ public sealed class CategoriesController : ControllerBase
         var updated = await _service.UpdateAsync(request, cancellationToken);
         return updated ? NoContent() : NotFound();
     }
-
     /// <summary>
     /// Deletes a category.
     /// </summary>
