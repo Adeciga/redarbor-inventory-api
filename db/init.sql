@@ -6,7 +6,10 @@ GO
 CREATE TABLE Categories (
     Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     Name NVARCHAR(200) NOT NULL,
-    IsActive BIT NOT NULL
+    IsActive BIT NOT NULL,
+    IsDeleted BIT NOT NULL CONSTRAINT DF_Categories_IsDeleted DEFAULT (0),
+    DeletedAtUtc DATETIME2 NULL,
+    DeletedBy NVARCHAR(100) NULL
 );
 
 CREATE TABLE Products (
@@ -14,7 +17,10 @@ CREATE TABLE Products (
     Name NVARCHAR(200) NOT NULL,
     CategoryId INT NOT NULL,
     Stock INT NOT NULL,
-    IsActive BIT NOT NULL
+    IsActive BIT NOT NULL,
+    IsDeleted BIT NOT NULL CONSTRAINT DF_Products_IsDeleted DEFAULT (0),
+    DeletedAtUtc DATETIME2 NULL,
+    DeletedBy NVARCHAR(100) NULL
 );
 
 CREATE TABLE InventoryMovements (
