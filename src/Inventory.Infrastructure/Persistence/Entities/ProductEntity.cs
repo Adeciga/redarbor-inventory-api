@@ -7,4 +7,7 @@ public sealed class ProductEntity
     public int CategoryId { get; set; }
     public int Stock { get; set; }
     public bool IsActive { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTime? DeletedAtUtc { get; set; }
+    public string? DeletedBy { get; set; }
 }
