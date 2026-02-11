@@ -1,11 +1,13 @@
-﻿using Inventory.Application.Categories;
+﻿using Inventory.Application.Behaviors;
+using Inventory.Application.Categories;
+using Inventory.Application.InventoryMovements;
+using Inventory.Application.Products;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Persistence.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Inventory.Application.Products;
-using Inventory.Application.InventoryMovements;
 
 
 
@@ -31,6 +33,8 @@ public static class DependencyInjection
         services.AddScoped<IInventoryMovementReadRepository, InventoryMovementReadRepository>();
         services.AddScoped<IInventoryMovementWriteRepository>(_ => new InventoryMovementWriteRepository(connectionString));
 
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         return services;
     }

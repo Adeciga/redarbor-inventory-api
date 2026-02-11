@@ -1,20 +1,15 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
 namespace Inventory.Api.Auth;
-
 public sealed class JwtTokenService
 {
     private readonly IConfiguration _configuration;
-
     public JwtTokenService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-
     public string CreateToken(string username)
     {
         var issuer = _configuration["Jwt:Issuer"] ?? string.Empty;
@@ -29,7 +24,6 @@ public sealed class JwtTokenService
             new Claim(ClaimTypes.Name, username),
             new Claim("role", "InventoryUser")
         };
-
         var token = new JwtSecurityToken(
             issuer,
             audience,

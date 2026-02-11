@@ -16,6 +16,7 @@ public sealed class CategoryReadRepository : ICategoryReadRepository
     public async Task<IReadOnlyList<CategoryDto>> GetAllAsync(CancellationToken cancellationToken) =>
         await _dbContext.Categories
             .AsNoTracking()
+            .Where(x => !EF.Property<bool>(x, "IsDeleted"))
             .OrderBy(x => x.Name)
             .Select(x => new CategoryDto(x.Id, x.Name, x.IsActive))
             .ToListAsync(cancellationToken);
@@ -23,7 +24,24 @@ public sealed class CategoryReadRepository : ICategoryReadRepository
     public async Task<CategoryDto?> GetByIdAsync(int id, CancellationToken cancellationToken) =>
         await _dbContext.Categories
             .AsNoTracking()
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == id && !EF.Property<bool>(x, "IsDeleted"))
             .Select(x => new CategoryDto(x.Id, x.Name, x.IsActive))
             .SingleOrDefaultAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<CategoryDto>> GetAllPagedAsync(
+       int page,
+       int pageSize,
+       CancellationToken cancellationToken)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _dbContext.Categories
+            .AsNoTracking()
+            .Where(x => !EF.Property<bool>(x, "IsDeleted"))
+            .OrderBy(x => x.Id)
+            .Skip(skip)
+            .Take(pageSize)
+            .Select(x => new CategoryDto(x.Id, x.Name, x.IsActive))
+            .ToListAsync(cancellationToken);
+    }
+
 }

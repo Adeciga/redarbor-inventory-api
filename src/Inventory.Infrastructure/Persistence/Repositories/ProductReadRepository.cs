@@ -16,6 +16,7 @@ public sealed class ProductReadRepository : IProductReadRepository
     public async Task<IReadOnlyList<ProductDto>> GetAllAsync(CancellationToken cancellationToken) =>
         await _dbContext.Products
             .AsNoTracking()
+            .Where(x => !EF.Property<bool>(x, "IsDeleted"))
             .OrderBy(x => x.Name)
             .Select(x => new ProductDto(x.Id, x.Name, x.CategoryId, x.Stock, x.IsActive))
             .ToListAsync(cancellationToken);
@@ -23,7 +24,24 @@ public sealed class ProductReadRepository : IProductReadRepository
     public async Task<ProductDto?> GetByIdAsync(int id, CancellationToken cancellationToken) =>
         await _dbContext.Products
             .AsNoTracking()
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == id && !EF.Property<bool>(x, "IsDeleted"))
             .Select(x => new ProductDto(x.Id, x.Name, x.CategoryId, x.Stock, x.IsActive))
             .SingleOrDefaultAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<ProductDto>> GetAllPagedAsync(
+    int page,
+    int pageSize,
+    CancellationToken cancellationToken)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _dbContext.Products
+            .AsNoTracking()
+            .Where(x => !EF.Property<bool>(x, "IsDeleted"))
+            .OrderBy(x => x.Id)
+            .Skip(skip)
+            .Take(pageSize)
+            .Select(x => new ProductDto(x.Id, x.Name, x.CategoryId, x.Stock, x.IsActive))
+            .ToListAsync(cancellationToken);
+    }
+
 }

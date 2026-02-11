@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 #nullable disable
-
 namespace Inventory.Identity.Persistence.Migrations
 {
     public partial class InitialOpenIddict : Migration
@@ -147,7 +144,6 @@ namespace Inventory.Identity.Persistence.Migrations
                 unique: true,
                 filter: "[ReferenceId] IS NOT NULL");
         }
-
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
